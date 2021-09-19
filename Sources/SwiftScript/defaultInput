@@ -1,0 +1,27 @@
+var a = 5
+let b = 1
+let c = a + b
+let d = false
+let e = -3.14
+let f = 5.0
+let g = -a
+let h = "House"
+let i = "ion"
+let j = "jet
+let k = "redKite
+
+if a = 5 {
+a = b + a
+}
+
+f = f + 1
+b = b + 1
+
+print(a)
+
+
+print(c)
+
+a += a
+
+print(a)
