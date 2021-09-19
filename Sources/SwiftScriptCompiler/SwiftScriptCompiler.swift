@@ -18,7 +18,7 @@ let kDebug = true
 /// Call on `SwiftScriptCompiler.compiler` to access the main compiler.
 public class SwiftScriptCompiler: Codable {
     // MARK: - Basics
-    var delegate: SchwiftScriptDelegate? = nil
+    public var delegate: SchwiftScriptDelegate? = nil
     var state = State()
     var lightCompile = false
     
@@ -132,6 +132,6 @@ public class SwiftScriptCompiler: Codable {
 
 // MARK: - Delegate
 //Splits the raw code string into string components based on newlines.
-protocol SchwiftScriptDelegate {
+public protocol SchwiftScriptDelegate {
     func update()
 }
