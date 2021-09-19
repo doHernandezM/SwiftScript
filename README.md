@@ -9,29 +9,26 @@ I'm thinking that I should be able to use blocks to get things done.
 To get started
 1. Conform to 
 ```swift
-SchwiftScriptDelegate
-```
-  - 
-  ```swift
-  func update()
+public protocol SchwiftScriptDelegate {
+    func update()
+}
   ```
-2. Set the 
+2. Set the designated delegate
 ```swift
-SwiftScriptCompiler.compiler.delegate
+SwiftScriptCompiler.compiler.delegate = myDelegate
 ```
- to the designated delegate
 3. Set the 
 ```swift
-SwiftScriptCompiler.compiler.string
+SwiftScriptCompiler.compiler.string = myStringToBeCompiled
 ```
  to string to be compiled or highlighted
 4. Once the string has been compiled, you can access the attributed strings via 
 ```swift
-SwiftScriptCompiler.compiler.attributedString
+myAttributedString = SwiftScriptCompiler.compiler.attributedString
 ```
-5. Or you can access the compiled lines and vars via 
+5. Or you can access the compiled lines, errors and vars via 
 ```swift
-SwiftScriptCompiler.compiler.state
+var errors: [SwiftScriptCompiler.Error] = SwiftScriptCompiler.compiler.state.errors
 ```
 
 ### Requires:
