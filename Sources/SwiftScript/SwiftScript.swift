@@ -126,12 +126,12 @@ public class SwiftScript: Codable {
                 print("\r\t Analyzed Lines\r")
         
         let codeLines = codeString.components(separatedBy: .newlines)
+        print(codeString)
         
         for (int, lineString) in codeLines.enumerated() {
             
             let line = Line(text: lineString, pos: int, words: [], theOperator: nil)
             //Adds line to state
-            print(line.words)
             state.lines.append(line)
             
         }
