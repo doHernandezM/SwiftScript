@@ -1,4 +1,4 @@
-# SwiftScript v0.1
+# SwiftScript v0.1.0
 ##"*Lite*" Version of Swift: for fun
 
 ### "1 part HyperCard, 1 part realBasic(rip), and 3 parts Swift."

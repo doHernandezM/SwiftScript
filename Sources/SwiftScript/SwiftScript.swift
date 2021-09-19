@@ -131,7 +131,7 @@ public class SwiftScript: Codable {
             
             let line = Line(text: lineString, pos: int, words: [], theOperator: nil)
             //Adds line to state
-            print(line)
+            print(lineString)
             state.lines.append(line)
             
         }
