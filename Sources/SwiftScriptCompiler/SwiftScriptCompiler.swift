@@ -16,7 +16,7 @@ let kDebug = true
 ///
 ///
 /// Call on `SwiftScriptCompiler.compiler` to access the main compiler.
-class SwiftScriptCompiler: Codable {
+public class SwiftScriptCompiler: Codable {
     // MARK: - Basics
     var delegate: SchwiftScriptDelegate? = nil
     var state = State()
