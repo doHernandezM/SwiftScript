@@ -7,15 +7,13 @@
 //
 
 import Foundation
-//import SwiftScriptBlocks
-
 
 //let schwifty = SwiftScript(isLight: false, highlightSyntax: true, string: nil)
 let kDebug = true
 
 ///
 ///
-/// Call on `SwiftScript.compiler` to access the main compiler.
+/// Call on ``compiler`` to access the main compiler.
 public class SwiftScript: Codable {
     // MARK: - Basics
     public var delegate: SchwiftScriptDelegate? = nil
