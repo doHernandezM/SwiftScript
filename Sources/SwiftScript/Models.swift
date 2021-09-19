@@ -72,7 +72,7 @@ class Line: Codable {
         analyzeWords()
         
         interpretLine()
-        //         print(blockCommands)
+                 print(blockCommands)
         
         
         //        self.block = Block(words: self.words)

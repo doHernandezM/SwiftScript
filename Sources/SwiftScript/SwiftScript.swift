@@ -126,7 +126,7 @@ public class SwiftScript: Codable {
                 print("\r\t Analyzed Lines\r")
         
         let codeLines = codeString.components(separatedBy: .newlines)
-        print(codeString)
+//        print(codeString)
         
         for (int, lineString) in codeLines.enumerated() {
             
