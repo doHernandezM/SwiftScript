@@ -137,7 +137,7 @@ class Line: Codable {
                         /// var found
                         blockCommands["Create"] = LineCommand.create// Unknown type or error
                         variable2.value = variable3
-                        SwiftScriptCompiler.compiler.state.variables.append(variable2)
+                        SwiftScript.compiler.state.variables.append(variable2)
                         return
                     }
                 }

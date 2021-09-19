@@ -28,7 +28,7 @@ import UIKit
 #endif
 
 public class Highlighter: Codable {
-    var compiler: SwiftScriptCompiler
+    var compiler: SwiftScript
     public var attributedString: NSAttributedString? = nil
     
     enum CodingKeys: CodingKey {
@@ -40,7 +40,7 @@ public class Highlighter: Codable {
     /**
      This would theoretically support a highlighter for applications that don't need a full compiler.
      */
-    public init(compiler: SwiftScriptCompiler, rawString: String) {
+    public init(compiler: SwiftScript, rawString: String) {
         self.compiler = compiler
         self.attributedString = NSAttributedString(string: rawString)
 

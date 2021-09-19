@@ -10,13 +10,13 @@ import Foundation
 //import SwiftScriptBlocks
 
 
-//let schwifty = SwiftScriptCompiler(isLight: false, highlightSyntax: true, string: nil)
+//let schwifty = SwiftScript(isLight: false, highlightSyntax: true, string: nil)
 let kDebug = true
 
 ///
 ///
-/// Call on `SwiftScriptCompiler.compiler` to access the main compiler.
-public class SwiftScriptCompiler: Codable {
+/// Call on `SwiftScript.compiler` to access the main compiler.
+public class SwiftScript: Codable {
     // MARK: - Basics
     public var delegate: SchwiftScriptDelegate? = nil
     public var state = State()
@@ -28,19 +28,19 @@ public class SwiftScriptCompiler: Codable {
     ///
     ///
     ///To keeps things easy and make sure we only use this when we need it, we are making this static and public singleton, which is backed by an internal "\`internal?\`"
-    static public var compiler: SwiftScriptCompiler {
+    static public var compiler: SwiftScript {
         get {
-            if (SwiftScriptCompiler.`internal` == nil) {
-                SwiftScriptCompiler.`internal` = SwiftScriptCompiler(isLight: false, highlightSyntax: true, string: nil)
-                return SwiftScriptCompiler.`internal`!
+            if (SwiftScript.`internal` == nil) {
+                SwiftScript.`internal` = SwiftScript(isLight: false, highlightSyntax: true, string: nil)
+                return SwiftScript.`internal`!
             }
-            return SwiftScriptCompiler.`internal`!
+            return SwiftScript.`internal`!
         }
         set(newValue){
-            SwiftScriptCompiler.`internal` = newValue
+            SwiftScript.`internal` = newValue
         }
     }
-    static private var `internal`: SwiftScriptCompiler? = nil
+    static private var `internal`: SwiftScript? = nil
     
     static public var thread: Thread? = nil
     
@@ -90,24 +90,16 @@ public class SwiftScriptCompiler: Codable {
     
     // // MARK: Compiler Thread
     public func startCompiling() {
-        SwiftScriptCompiler.thread?.cancel()
-//        self.stopCompiling()
-        
-        SwiftScriptCompiler.thread = nil
-        SwiftScriptCompiler.thread = Thread(){ [self] in
+        SwiftScript.thread?.cancel()
+    
+        SwiftScript.thread = nil
+        SwiftScript.thread = Thread(){ [self] in
             self.compile()
             Thread.exit()
         }
         
-        SwiftScriptCompiler.thread?.qualityOfService = .userInteractive
-        SwiftScriptCompiler.thread?.start()
-    }
-    
-    public func stopCompiling() {
-        if SwiftScriptCompiler.thread == nil {return}
-        if SwiftScriptCompiler.thread!.isCancelled {
-            Thread.exit()
-        }
+        SwiftScript.thread?.qualityOfService = .userInteractive
+        SwiftScript.thread?.start()
     }
     
     // MARK: Init
