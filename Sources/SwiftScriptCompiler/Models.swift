@@ -452,7 +452,7 @@ let m = 200e50
 let n = f
 let o = 0
 
-//func foo() {
+func foo() {
     if a == 5 {
         a = b + a
     }
@@ -466,6 +466,6 @@ let o = 0
     print(b)
     print(c)
     print(f)
-//}
+}
 
 """
