@@ -10,6 +10,23 @@ import Foundation
 #if os(OSX)
 import Cocoa
 
+///These are cheats to make this a bit more portable. iOS take precedence, since Catalyst.
+typealias UIFont = NSFont
+typealias UIColor = NSColor
+extension UIColor {
+    func hue (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) -> UIColor {
+        return UIColor(calibratedHue: hue, saturation: saturation, brightness: brightness, alpha: alpha)
+    }
+    static var label:NSColor {
+        get {
+            return NSColor.textColor
+        }
+    }
+}
+#elseif os(iOS)
+import UIKit
+#endif
+
 public class Highlighter: Codable {
     var compiler: SwiftScriptCompiler
     public var attributedString: NSAttributedString? = nil
@@ -19,22 +36,14 @@ public class Highlighter: Codable {
     }
     
     // MARK: Compildf
-    // TODO: Add support for creating a highlighter without a compiler. /IOS/Linux support
+    // TODO: Add support for creating a highlighter without a compiler. /Linux support
     /**
      This would theoretically support a highlighter for applications that don't need a full compiler.
      */
     public init(compiler: SwiftScriptCompiler, rawString: String) {
         self.compiler = compiler
         self.attributedString = NSAttributedString(string: rawString)
-        //        let encoder = JSONEncoder()
-        //        do {
-        //            let jsonData = try encoder.encode(compiler)
-        //            let jsonString = String(data: jsonData, encoding: .utf8)
-        //            print(jsonString ?? "EncoderError")
-        //        } catch {
-        //            print("EncodingError: \(error)")
-        //        }
-        
+
         let newAttributed = NSMutableAttributedString(string: "")
         
         
@@ -88,8 +97,8 @@ public class Highlighter: Codable {
     func attributesForLine(line: String) -> NSAttributedString {
         var multipleAttributes = [NSAttributedString.Key : Any]()
         
-        let font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSizeSmall, weight: .bold)
-        multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemRed
+        let font = UIFont.monospacedSystemFont(ofSize: kDefaultFontSizeSmall, weight: .bold)
+        multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemRed
         multipleAttributes[NSAttributedString.Key.font] = font
         
         let myAttrString = NSMutableAttributedString(string: line, attributes: multipleAttributes)
@@ -100,51 +109,51 @@ public class Highlighter: Codable {
     func attributesForWord(word: Word) -> NSAttributedString {
         var multipleAttributes = [NSAttributedString.Key : Any]()
         
-        var font = NSFont.systemFont(ofSize: kDefaultFontSize, weight: .medium)
+        var font = UIFont.systemFont(ofSize: kDefaultFontSize, weight: .medium)
         
         multipleAttributes[NSAttributedString.Key.font] = font
-        multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.textColor
+        multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.label
         
         switch word.type {
         case .error:
-            font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSizeSmall, weight: .bold)
-            multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemRed
-            multipleAttributes[NSAttributedString.Key.backgroundColor] = NSColor(calibratedHue: 0.0, saturation: 0.0, brightness: 0.5, alpha: 0.25)
+            font = UIFont.monospacedSystemFont(ofSize: kDefaultFontSizeSmall, weight: .bold)
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemRed
+            multipleAttributes[NSAttributedString.Key.backgroundColor] = UIColor(hue: 0.0, saturation: 0.0, brightness: 0.5, alpha: 0.25)
         case .lineNumber:
-            font = NSFont.systemFont(ofSize: kDefaultFontSize, weight: .light)
-            multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemGray
+            font = UIFont.systemFont(ofSize: kDefaultFontSize, weight: .light)
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemGray
         case .command:
-            multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemIndigo
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemIndigo
         case .`operator`:
-            font = NSFont.systemFont(ofSize: kDefaultFontSize, weight: .medium)
+            font = UIFont.systemFont(ofSize: kDefaultFontSize, weight: .medium)
             multipleAttributes[NSAttributedString.Key.font] = font
             switch word.theOperator {
             case .letOp, .varOp, .ifOp:
-                let font = NSFont.systemFont(ofSize: kDefaultFontSize, weight: .bold)
+                let font = UIFont.systemFont(ofSize: kDefaultFontSize, weight: .bold)
                 multipleAttributes[NSAttributedString.Key.font] = font
-                multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemPurple
+                multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemPurple
             default:
-                font = NSFont.systemFont(ofSize: kDefaultFontSize, weight: .regular)
+                font = UIFont.systemFont(ofSize: kDefaultFontSize, weight: .regular)
                 multipleAttributes[NSAttributedString.Key.font] = font
-                multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemPink
+                multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemPink
             }
         case .`var`:
-            font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .light)
-            multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.textColor
+            font = UIFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .light)
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.label
         case .string:
-            multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemRed
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemRed
         case .int, .double, .float:
-            font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .regular)
+            font = UIFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .regular)
             multipleAttributes[NSAttributedString.Key.font] = font
-            multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemYellow
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemYellow
         case .bool:
-            font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .semibold)
+            font = UIFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .semibold)
             multipleAttributes[NSAttributedString.Key.font] = font
-            multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemOrange
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemOrange
         case .varOp:
-            font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .semibold)
+            font = UIFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .semibold)
             multipleAttributes[NSAttributedString.Key.font] = font
-            multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemIndigo
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemIndigo
         }
         
         let myAttrString = NSAttributedString(string: word.string, attributes: multipleAttributes)
@@ -154,4 +163,4 @@ public class Highlighter: Codable {
     
 }
 
-#endif
+//#endif
