@@ -41,7 +41,7 @@ public class SwiftScriptCompiler: Codable {
         }
     }
     static private var `internal`: SwiftScriptCompiler? = nil
-
+    
     static public var thread: Thread? = nil
     
     
@@ -82,11 +82,13 @@ public class SwiftScriptCompiler: Codable {
             }
             
             //Delegate
-            delegate?.update()
+            DispatchQueue.main.async {
+                self.delegate?.update()
+            }
         }
     }
-
-// // MARK: Compiler Thread
+    
+    // // MARK: Compiler Thread
     public func startCompiling() {
         SwiftScriptCompiler.thread?.cancel()
         self.stopCompiling()
@@ -127,7 +129,7 @@ public class SwiftScriptCompiler: Codable {
     // MARK: - Analyze - Line
     //Splits the raw code string into string components based on newlines.
     func analyzeLines(codeString: String) {
-//        print("\r\t Analyzed Lines\r")
+        //        print("\r\t Analyzed Lines\r")
         
         let codeLines = codeString.components(separatedBy: .newlines)
         
@@ -136,7 +138,7 @@ public class SwiftScriptCompiler: Codable {
             let line = Line(text: lineString, pos: int, words: [], theOperator: nil)
             //Adds line to state
             state.lines.append(line)
-
+            
         }
         
         
