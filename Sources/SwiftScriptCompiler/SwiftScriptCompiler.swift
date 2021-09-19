@@ -53,7 +53,7 @@ public class SwiftScriptCompiler: Codable {
 #endif
     // MARK: - Compiling
     /// Set this to start the compiler.
-    var string: String? = "" {
+    public var string: String? = "" {
         didSet {
             startCompiler()
         }

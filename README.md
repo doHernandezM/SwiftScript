@@ -17,14 +17,13 @@ public protocol SchwiftScriptDelegate {
 ```swift
 SwiftScriptCompiler.compiler.delegate = myDelegate
 ```
-3. Set the 
+3. Set the compilers string to string to be compiled or highlighted
 ```swift
 SwiftScriptCompiler.compiler.string = myStringToBeCompiled
 ```
- to string to be compiled or highlighted
 4. Once the string has been compiled, you can access the attributed strings via 
 ```swift
-myAttributedString = SwiftScriptCompiler.compiler.attributedString
+let myAttributedString: NSAttributedString = SwiftScriptCompiler.compiler.attributedString
 ```
 5. Or you can access the compiled lines, errors and vars via 
 ```swift
