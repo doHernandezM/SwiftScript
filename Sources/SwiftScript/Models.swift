@@ -67,7 +67,7 @@ class Line: Codable {
         self.words = words
         self.theOperator = theOperator
         
-        //        print(("L"),(self.pos),("---------------------------------------------------------------------------------------------- \r"),self.string)
+                print(("L"),(self.pos),self.string)
         
         analyzeWords()
         
