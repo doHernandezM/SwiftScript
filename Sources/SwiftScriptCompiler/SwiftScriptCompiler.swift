@@ -91,10 +91,12 @@ public class SwiftScriptCompiler: Codable {
     // // MARK: Compiler Thread
     public func startCompiling() {
         SwiftScriptCompiler.thread?.cancel()
-        self.stopCompiling()
+//        self.stopCompiling()
         
+        SwiftScriptCompiler.thread = nil
         SwiftScriptCompiler.thread = Thread(){ [self] in
             self.compile()
+            Thread.exit()
         }
         
         SwiftScriptCompiler.thread?.qualityOfService = .userInteractive
