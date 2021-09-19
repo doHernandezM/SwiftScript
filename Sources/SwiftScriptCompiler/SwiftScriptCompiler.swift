@@ -42,7 +42,7 @@ public class SwiftScriptCompiler: Codable {
     }
     static private var `internal`: SwiftScriptCompiler? = nil
 
-    static public var compilerThread: Thread? = nil
+    static public var thread: Thread? = nil
     
     
     // MARK: Syntax Highlighting
@@ -55,7 +55,7 @@ public class SwiftScriptCompiler: Codable {
     /// Set this to start the compiler.
     public var string: String? = "" {
         didSet {
-            startCompiler()
+            startCompiling()
         }
     }
     
@@ -87,18 +87,20 @@ public class SwiftScriptCompiler: Codable {
     }
 
 // // MARK: Compiler Thread
-    public func startCompiler() {
-        SwiftScriptCompiler.compilerThread?.cancel()
-        SwiftScriptCompiler.compilerThread = Thread(){ [self] in
+    public func startCompiling() {
+        SwiftScriptCompiler.thread?.cancel()
+        self.stopCompiling()
+        
+        SwiftScriptCompiler.thread = Thread(){ [self] in
             self.compile()
         }
         
-        SwiftScriptCompiler.compilerThread?.qualityOfService = .userInteractive
-        SwiftScriptCompiler.compilerThread?.start()
+        SwiftScriptCompiler.thread?.qualityOfService = .userInteractive
+        SwiftScriptCompiler.thread?.start()
     }
     
-    public func shouldStopPoller() {
-        if SwiftScriptCompiler.compilerThread!.isCancelled {
+    public func stopCompiling() {
+        if SwiftScriptCompiler.thread!.isCancelled {
             Thread.exit()
         }
     }
