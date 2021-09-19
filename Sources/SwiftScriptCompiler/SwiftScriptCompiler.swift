@@ -19,8 +19,8 @@ let kDebug = true
 public class SwiftScriptCompiler: Codable {
     // MARK: - Basics
     public var delegate: SchwiftScriptDelegate? = nil
-    var state = State()
-    var lightCompile = false
+    public var state = State()
+    public var lightCompile = false
     
     //Mark: - Main compiler
     
@@ -43,14 +43,14 @@ public class SwiftScriptCompiler: Codable {
 
     
     // MARK: Syntax Highlighting
-    var highlightSyntax = false
+    public var highlightSyntax = false
 #if os(OSX) || os(iOS)
-    var syntaxHighlighter: Highlighter? = nil
-    var attributedString: NSAttributedString? = nil
+    public var syntaxHighlighter: Highlighter? = nil
+    public var attributedString: NSAttributedString? = nil
 #endif
     // MARK: - string
     /// Set this to start the compiler.
-    var string: String? = "" {
+    public var string: String? = "" {
         didSet {
             if let codeString = self.string {
                 if codeString.isEmpty {return}
@@ -84,7 +84,7 @@ public class SwiftScriptCompiler: Codable {
     /*
      This would theoretically support a highlighter for applications that don't need a full compiler.
      */
-    init(isLight: Bool, highlightSyntax: Bool, string: String?) {
+    public init(isLight: Bool, highlightSyntax: Bool, string: String?) {
         self.lightCompile = isLight
         self.highlightSyntax = highlightSyntax
         if string != nil {
