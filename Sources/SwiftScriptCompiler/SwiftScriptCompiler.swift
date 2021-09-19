@@ -102,6 +102,7 @@ public class SwiftScriptCompiler: Codable {
     }
     
     public func stopCompiling() {
+        if SwiftScriptCompiler.thread == nil {return}
         if SwiftScriptCompiler.thread!.isCancelled {
             Thread.exit()
         }
