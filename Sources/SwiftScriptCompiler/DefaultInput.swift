@@ -1,10 +1,11 @@
 //
 //  DefaultInput.swift
-//  Schwifty
+//  SwiftScript
 //
 //  Created by Dennis Hernandez on 10/14/19.
 //  Copyright © 2019 Dennis Hernandez. All rights reserved.
 //
+
 
 import Foundation
 

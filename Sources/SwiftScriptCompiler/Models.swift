@@ -1,6 +1,6 @@
 //
 //  CodeModels.swift
-//  Schwifty
+//  SwiftScript
 //
 //  Created by Dennis Hernandez on 9/30/19.
 //  Copyright © 2019 Dennis Hernandez. All rights reserved.
@@ -10,18 +10,18 @@ import Foundation
 
 // MARK: - Error
 // TODO: Add more detailed error type for debugging
-struct ErrorSchwifty: Codable {
+struct Error: Codable {
     var type = ""
     var pos = 0
     var length = 0
 }
 
 // MARK: - State
-// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
-class SchwiftyState: Codable {
+/// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
+class State: Codable {
     var version = 0.1
     
-    var errors: [ErrorSchwifty] = []
+    var errors: [Error] = []
     var lines: [Line] = []
     var variables: [Word] = []
     
@@ -40,7 +40,7 @@ class SchwiftyState: Codable {
 
 // MARK: - Line
 // TODO: Reoganize and make this look prettier.
-// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
+/// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
 class Line: Codable {
     var string =  ""
     var pos: Int = -1
@@ -67,12 +67,12 @@ class Line: Codable {
         self.words = words
         self.theOperator = theOperator
         
-//        print(("L"),(self.pos),("---------------------------------------------------------------------------------------------- \r"),self.string)
+        //        print(("L"),(self.pos),("---------------------------------------------------------------------------------------------- \r"),self.string)
         
         analyzeWords()
         
         interpretLine()
-//         print(blockCommands)
+        //         print(blockCommands)
         
         
         //        self.block = Block(words: self.words)
@@ -80,7 +80,7 @@ class Line: Codable {
     }
     
     // MARK: Analyze - Word
-    // Splits the line String into string components based on whitespace.
+    /// Splits the line String into string components based on whitespace.
     func analyzeWords() {
         let codeWords = self.string.components(separatedBy: .whitespaces)
         for (_,word) in codeWords.enumerated() {
@@ -93,7 +93,7 @@ class Line: Codable {
     func interpretLine() {
         // MARK: - Line Pattern
         // Step 2 - Patterns
-        // MARK: Assign values to variable
+        // Assign values to variable
         let variable1 = self.words[0] /// likely let/var or var ie "Let " or "foo "
         
         //        if self.words.count > 0 {
@@ -115,29 +115,29 @@ class Line: Codable {
             
             // Modify existing variable
             if (variable2.theOperator?.isAssignOperator() ?? false)  {
-                blockCommands["Assign"] = LineCommand.Assign
+                blockCommands["Assign"] = LineCommand.assign
                 return
             }
             
             if (variable1.theOperator?.isCreateVariable() ?? false) {
                 
-                ///I"m not really sure what's going on here '<=4' then '>=4'??? WTF
+                ///I'm not really sure what's going on here `<=4\` then `>=4`??? WTF Maybe a type
                 if self.words.count <= 4 {
-//                    print(self.words)
-//                    print("|||||||||||||||||||\r\r")
+                    //                    print(self.words)
+                    //                    print("|||||||||||||||||||\r\r")
                     if self.words.count >= 4 {
                         let variable3 = self.words[3]
                         ///likely var ie "foo " or "\"foo\"" | "3.14" | "false"
                         if !(variable3.type.isValue()) {
-                            variable3.type = .ErrorType
+                            variable3.type = .error
                             //Adds whole line error
                             return
                         }
                         
-                        // var found
-                        blockCommands["Create"] = LineCommand.Create// Unknown type or error
+                        /// var found
+                        blockCommands["Create"] = LineCommand.create// Unknown type or error
                         variable2.value = variable3
-                        schwifty.state.variables.append(variable2)
+                        SwiftScriptCompiler.compiler.state.variables.append(variable2)
                         return
                     }
                 }
@@ -164,16 +164,16 @@ class Word: Codable {
     
     var value: Word? = nil
     
-    var type = Types.ErrorType
+    var type = Types.error
     
     func typeDescription() -> String{
         var typeString = "Undescribed"
         
-        if (self.type == .CommandsType) {
+        if (self.type == .command) {
             typeString = command!.rawValue
             return typeString
         }
-        if (self.type == .OperatorType) {
+        if (self.type == .`operator`) {
             typeString = self.theOperator!.rawValue
             return typeString
         }
@@ -223,7 +223,7 @@ class Word: Codable {
     func isString() -> Bool {
         
         if isQoute(string: String(string.prefix(1))) && isQoute(string: String(string.suffix(1))) {
-            type = .StringType
+            type = .string
             return true
         }
         return false
@@ -234,7 +234,7 @@ class Word: Codable {
             let stringComponents = string.components(separatedBy: theCommand.rawValue)
             if stringComponents.count > 1 {
                 command = theCommand
-                type = .CommandsType
+                type = .command
                 return
             }
         }
@@ -242,8 +242,8 @@ class Word: Codable {
         for (_,anOpertator) in Operators.allCases.enumerated() {
             if string == anOpertator.rawValue {
                 theOperator = anOpertator
-//                print(("OP:"),anOpertator.string())
-                type = .OperatorType
+                //                print(("OP:"),anOpertator.string())
+                type = .`operator`
                 return
             }
         }
@@ -257,22 +257,22 @@ class Word: Codable {
         if assignedNumber == nil {
             if string == "false" {
                 number = NSNumber(value: false)
-                type = .BoolType
+                type = .bool
                 return
             }
             else if string == "true" {
                 number = NSNumber(value: true)
-                type = .BoolType
+                type = .bool
                 return
             }
             
             
-            type = .VarType
+            type = .`var`
             return
         }
         
         
-        if type == .LineNumberType {
+        if type == .lineNumber {
             return
         }
         
@@ -281,20 +281,21 @@ class Word: Codable {
         let numberType = CFNumberGetType(number)
         
         switch numberType {
+            /// Bool
         case .charType:
-            type = .BoolType
-            //Bool
+            type = .bool
+            /// Int
         case .sInt8Type, .sInt16Type, .sInt32Type, .sInt64Type, .shortType, .intType, .longType, .longLongType, .cfIndexType, .nsIntegerType:
-            type = .IntType
-            //Int
+            type = .int
+            /// Double
         case .doubleType:
-            type = .DoubleType
-            //Double
+            type = .double
+            /// Float
         case .float32Type, .float64Type, .floatType, .cgFloatType:
-            type = .FloatType
-            //Float
+            type = .float
+            /// Error
         default:
-            type = .ErrorType
+            type = .error
         }
         
     }
@@ -309,26 +310,25 @@ class Word: Codable {
 }
 
 // MARK: - Types
-//
 enum Types: String {
-    case ErrorType
+    case error
     
-    case LineNumberType
+    case lineNumber
     
-    case CommandsType
-    case OperatorType
-    case VarType
-    case VarOpType
+    case command
+    case `operator`
+    case `var`
+    case varOp
     
-    case StringType
-    case IntType
-    case DoubleType
-    case FloatType
-    case BoolType
+    case string
+    case int
+    case double
+    case float
+    case bool
     
     func isValue() -> Bool {
         switch self {
-        case .StringType, .IntType, .DoubleType, .FloatType, .BoolType:
+        case .string, .int, .double, .float, .bool:
             return true
         default:
             return false
@@ -336,7 +336,7 @@ enum Types: String {
     }
     func isNumber() -> Bool {
         switch self {
-        case .IntType, .DoubleType, .FloatType, .BoolType:
+        case .int, .double, .float, .bool:
             return true
         default:
             return false
@@ -345,15 +345,13 @@ enum Types: String {
 }
 
 enum Commands: String, CaseIterable {
-    case Unassigned = "Unassigned"
-    case Print = "print"
-    case Dev = "Dev"
+    case unassigned = "Unassigned"
+    case print = "print"
+    case dev = "Dev"
     case UI = "UI"
 }
 
 enum Operators: String, CaseIterable {
-    //
-    //
     case letOp = "let"
     case varOp = "var"
     func isCreateVariable() -> Bool {
@@ -369,23 +367,23 @@ enum Operators: String, CaseIterable {
         return self.rawValue
     }
     
-    //MultiplicationPrecedence
-    //Left associative
+    ///MultiplicationPrecedence
+    ///Left associative
     case multOp = "*"
     case divOp = "/"
     case remainderOp = "%"
     
-    //AdditionPrecedence
-    //Left associative
+    ///AdditionPrecedence
+    ///Left associative
     case addOp = "+"
     case subOp = "-" //Also signOp
     
-    //NilCoalescingPrecedence
-    //Right associative
+    ///NilCoalescingPrecedence
+    ///Right associative
     case nilCoalescingOp = "??"
     
-    //ComparisonPrecedence
-    //None
+    ///ComparisonPrecedence
+    ///None
     case lessop = "<"
     case lessEqualop = "<="
     case greaterOp = ">"
@@ -393,13 +391,13 @@ enum Operators: String, CaseIterable {
     case equalsOp = "=="
     case notOp = "!="
     
-    //LogicalConjunctionPrecedence
-    //Left associative
+    ///LogicalConjunctionPrecedence
+    ///Left associative
     case andOp = "&&"
     case orOp = "||"
     
-    //AssignmentPrecedence
-    //Right associative
+    ///AssignmentPrecedence
+    ///Right associative
     case assignOp = "="
     case multAssignOp = "*="
     case divAssignOp = "/="
@@ -436,7 +434,7 @@ enum Operators: String, CaseIterable {
 }
 
 // MARK: - Default Input
-// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
+/// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
 let defaultInput = """
 var a = 5
 var b = 1

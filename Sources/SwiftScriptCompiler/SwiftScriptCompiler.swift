@@ -1,32 +1,55 @@
 //
 //  Engine.swift
-//  Schwifty
+//  SwiftScript
 //
 //  Created by Dennis Hernandez on 9/30/19.
 //  Copyright © 2019 Dennis Hernandez. All rights reserved.
 //
 
 import Foundation
-//import SchwiftyBlocks
+//import SwiftScriptBlocks
 
-let schwifty = SchwiftyCompiler(isLight: false, highlightSyntax: true, string: nil)
+
+//let schwifty = SwiftScriptCompiler(isLight: false, highlightSyntax: true, string: nil)
 let kDebug = true
 
-class SchwiftyCompiler: Codable {
+///
+///
+/// Call on `SwiftScriptCompiler.compiler` to access the main compiler.
+class SwiftScriptCompiler: Codable {
     // MARK: - Basics
-    var delegate: SchwiftyDelegate? = nil
-    var state = SchwiftyState()
+    var delegate: SchwiftScriptDelegate? = nil
+    var state = State()
     var lightCompile = false
+    
+    //Mark: - Main compiler
+    
+    ///
+    ///
+    ///To keeps things easy and make sure we only use this when we need it, we are making this static and public singleton, which is backed by an internal "\`internal?\`"
+    static public var compiler: SwiftScriptCompiler {
+        get {
+            if (SwiftScriptCompiler.`internal` == nil) {
+                SwiftScriptCompiler.`internal` = SwiftScriptCompiler(isLight: false, highlightSyntax: true, string: nil)
+                return SwiftScriptCompiler.`internal`!
+            }
+            return SwiftScriptCompiler.`internal`!
+        }
+        set(newValue){
+            SwiftScriptCompiler.`internal` = newValue
+        }
+    }
+    static private var `internal`: SwiftScriptCompiler? = nil
+
     
     // MARK: Syntax Highlighting
     var highlightSyntax = false
 #if os(OSX) || os(iOS)
-    var syntaxHighlighter: SchwiftyHighlighter? = nil
-#endif
+    var syntaxHighlighter: Highlighter? = nil
     var attributedString: NSAttributedString? = nil
-    
+#endif
     // MARK: - string
-    // Set this to start the compiler.
+    /// Set this to start the compiler.
     var string: String? = "" {
         didSet {
             if let codeString = self.string {
@@ -45,7 +68,7 @@ class SchwiftyCompiler: Codable {
                 ///Syntax Highlighting
                 if highlightSyntax && !lightCompile {
 #if os(OSX) || os(iOS)
-                    syntaxHighlighter = SchwiftyHighlighter(compiler: self, rawString: codeString)
+                    syntaxHighlighter = Highlighter(compiler: self, rawString: codeString)
 #endif
                     self.attributedString = syntaxHighlighter?.attributedString
                 }
@@ -109,6 +132,6 @@ class SchwiftyCompiler: Codable {
 
 // MARK: - Delegate
 //Splits the raw code string into string components based on newlines.
-protocol SchwiftyDelegate {
+protocol SchwiftScriptDelegate {
     func update()
 }

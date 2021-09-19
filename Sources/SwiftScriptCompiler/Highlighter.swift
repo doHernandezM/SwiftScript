@@ -1,30 +1,29 @@
 //
-//  SchwiftyHighlighter.swift
-//  Schwifty
+//  SwiftScriptHighlighter.swift
+//  SwiftScript
 //
 //  Created by Dennis Hernandez on 10/7/19.
 //  Copyright © 2019 Dennis Hernandez. All rights reserved.
 //
 
 import Foundation
-#if os(OSX) || os(iOS)
+#if os(OSX)
 import Cocoa
 
-
-class SchwiftyHighlighter: Codable {
-    var compiler: SchwiftyCompiler
+class Highlighter: Codable {
+    var compiler: SwiftScriptCompiler
     var attributedString: NSAttributedString? = nil
     
     enum CodingKeys: CodingKey {
         case compiler
     }
     
-    // MARK: Init
-    // TODO: Add support for creating a highlighter without a compiler.
-    /*
+    // MARK: Compildf
+    // TODO: Add support for creating a highlighter without a compiler. /IOS/Linux support
+    /**
      This would theoretically support a highlighter for applications that don't need a full compiler.
      */
-    init(compiler: SchwiftyCompiler, rawString: String) {
+    init(compiler: SwiftScriptCompiler, rawString: String) {
         self.compiler = compiler
         self.attributedString = NSAttributedString(string: rawString)
         //        let encoder = JSONEncoder()
@@ -70,15 +69,15 @@ class SchwiftyHighlighter: Codable {
     /*For Ref
      enum Types: String {
      case errorType
-     case LineNumber
-     case CommandsType
-     case OperatorType
+     case lineNumber
+     case commandsType
+     case operatorType
      case varType
-     case StringType
-     case IntType
+     case dtringType
+     case intType
      case doubleType
-     case FloatType
-     case BoolType
+     case floatType
+     case boolType
      }
      */
     
@@ -86,8 +85,6 @@ class SchwiftyHighlighter: Codable {
     let kDefaultFontSizeSmall: CGFloat = 12.0
     
     // FIXME: THis code need much simplyfication and portability.
-
-    
     func attributesForLine(line: String) -> NSAttributedString {
         var multipleAttributes = [NSAttributedString.Key : Any]()
         
@@ -109,16 +106,16 @@ class SchwiftyHighlighter: Codable {
         multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.textColor
         
         switch word.type {
-        case .ErrorType:
+        case .error:
             font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSizeSmall, weight: .bold)
             multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemRed
             multipleAttributes[NSAttributedString.Key.backgroundColor] = NSColor(calibratedHue: 0.0, saturation: 0.0, brightness: 0.5, alpha: 0.25)
-        case .LineNumberType:
+        case .lineNumber:
             font = NSFont.systemFont(ofSize: kDefaultFontSize, weight: .light)
             multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemGray
-        case .CommandsType:
+        case .command:
             multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemIndigo
-        case .OperatorType:
+        case .`operator`:
             font = NSFont.systemFont(ofSize: kDefaultFontSize, weight: .medium)
             multipleAttributes[NSAttributedString.Key.font] = font
             switch word.theOperator {
@@ -131,20 +128,20 @@ class SchwiftyHighlighter: Codable {
                 multipleAttributes[NSAttributedString.Key.font] = font
                 multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemPink
             }
-        case .VarType:
+        case .`var`:
             font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .light)
             multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.textColor
-        case .StringType:
+        case .string:
             multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemRed
-        case .IntType, .DoubleType, .FloatType:
+        case .int, .double, .float:
             font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .regular)
             multipleAttributes[NSAttributedString.Key.font] = font
             multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemYellow
-        case .BoolType:
+        case .bool:
             font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .semibold)
             multipleAttributes[NSAttributedString.Key.font] = font
             multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemOrange
-        case .VarOpType:
+        case .varOp:
             font = NSFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .semibold)
             multipleAttributes[NSAttributedString.Key.font] = font
             multipleAttributes[NSAttributedString.Key.foregroundColor] = NSColor.systemIndigo
@@ -154,7 +151,7 @@ class SchwiftyHighlighter: Codable {
         return myAttrString
         
     }
-
+    
 }
 
 #endif

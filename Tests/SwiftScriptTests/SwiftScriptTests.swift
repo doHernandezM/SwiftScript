@@ -1,11 +1,11 @@
 import XCTest
-@testable import SwiftScript
+@testable import SwiftScriptCompiler
 
 final class SwiftScriptTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(SwiftScript().text, "Hello, World!")
+//        XCTAssertEqual(SwiftScriptCompiler().text, "Hello, World!")
     }
 }

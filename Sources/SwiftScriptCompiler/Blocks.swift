@@ -1,6 +1,6 @@
 //
-//  SchwiftyBlocks.swift
-//  Schwifty
+//  SwiftScriptBlocks.swift
+//  SwiftScript
 //
 //  Created by Dennis Hernandez on 10/11/19.
 //  Copyright © 2019 Dennis Hernandez. All rights reserved.
@@ -9,21 +9,21 @@
 import Foundation
 
 // MARK: - Block
-// Blocks are where all of the scripting magive happens. If this gets as long as Word, then will have to break out into seperate swift file.
+/** Block
 
-/*
- Block Types
- Create:
+ Blocks are where all of the scripting magive happens. If this gets as long as Word, then will have to break out into seperate swift file.
+ Sample `Block Types`:
+ 
+ • Create
  Let X   =   1
- Assign
+ • Assign
  X   =   2
- Operator
+ • Operator
  x   +   3
  
  Swift Infix Operator Precedence: https://developer.apple.com/documentation/swift/swift_standard_library/operator_declarations#2881142
  PRECEDENCE: * / % + - *= /= += -=
  */
-
 
 class Block {
     var words: [Word] = []
@@ -50,11 +50,7 @@ class Block {
             
         }
         
-        
-        
-        
-        
-        
+
 //        for (_,word) in words.enumerated() {
 //            switch isBlockOpen(string: word.string) {
 //            case true:
@@ -126,21 +122,19 @@ class Block {
     
 }
 
-// MARK: init
-class instruction: Codable {
+class Instruction: Codable {
     var word: Word? = nil
-    
 }
 
 // MARK: - Types
-//
+///
 enum LineCommand: String, CaseIterable {
-    case Create
-    case Assign
+    case create
+    case assign
     
-    case Command
+    case command
     
-    case ConditionalIf
-    case ConditionalContinue
-    case ConditionalClose
+    case conditionalIf
+    case conditionalContinue
+    case conditionalClose
 }
