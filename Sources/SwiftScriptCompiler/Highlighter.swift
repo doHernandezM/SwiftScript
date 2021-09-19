@@ -10,9 +10,9 @@ import Foundation
 #if os(OSX)
 import Cocoa
 
-class Highlighter: Codable {
+public class Highlighter: Codable {
     var compiler: SwiftScriptCompiler
-    var attributedString: NSAttributedString? = nil
+    public var attributedString: NSAttributedString? = nil
     
     enum CodingKeys: CodingKey {
         case compiler
@@ -23,7 +23,7 @@ class Highlighter: Codable {
     /**
      This would theoretically support a highlighter for applications that don't need a full compiler.
      */
-    init(compiler: SwiftScriptCompiler, rawString: String) {
+    public init(compiler: SwiftScriptCompiler, rawString: String) {
         self.compiler = compiler
         self.attributedString = NSAttributedString(string: rawString)
         //        let encoder = JSONEncoder()

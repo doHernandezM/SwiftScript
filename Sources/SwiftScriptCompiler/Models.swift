@@ -18,7 +18,7 @@ struct Error: Codable {
 
 // MARK: - State
 /// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
-class State: Codable {
+public class State: Codable {
     var version = 0.1
     
     var errors: [Error] = []
