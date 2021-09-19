@@ -22,6 +22,7 @@ public class SwiftScriptCompiler: Codable {
     public var state = State()
     public var lightCompile = false
     
+    
     //Mark: - Main compiler
     
     ///
@@ -41,6 +42,8 @@ public class SwiftScriptCompiler: Codable {
     }
     static private var `internal`: SwiftScriptCompiler? = nil
 
+    static public var compilerThread: Thread? = nil
+    
     
     // MARK: Syntax Highlighting
     public var highlightSyntax = false
@@ -48,34 +51,55 @@ public class SwiftScriptCompiler: Codable {
     public var syntaxHighlighter: Highlighter? = nil
     public var attributedString: NSAttributedString? = nil
 #endif
-    // MARK: - string
+    // MARK: - Compiling
     /// Set this to start the compiler.
-    public var string: String? = "" {
+    var string: String? = "" {
         didSet {
-            if let codeString = self.string {
-                if codeString.isEmpty {return}
-                
-                ///Makes sure everything is clean.
-                state.errors = []
-                state.lines = []
-                state.variables = []
-                
-                //Analyzer
-                
-                ///Creates [Line]
-                analyzeLines(codeString: codeString)
-                
-                ///Syntax Highlighting
-                if highlightSyntax && !lightCompile {
+            startCompiler()
+        }
+    }
+    
+    fileprivate func compile() {
+        if let codeString = self.string {
+            if codeString.isEmpty {return}
+            
+            ///Makes sure everything is clean.
+            state.errors = []
+            state.lines = []
+            state.variables = []
+            
+            //Analyzer
+            
+            ///Creates [Line]
+            analyzeLines(codeString: codeString)
+            
+            ///Syntax Highlighting
+            if highlightSyntax && !lightCompile {
 #if os(OSX) || os(iOS)
-                    syntaxHighlighter = Highlighter(compiler: self, rawString: codeString)
+                syntaxHighlighter = Highlighter(compiler: self, rawString: codeString)
 #endif
-                    self.attributedString = syntaxHighlighter?.attributedString
-                }
-                
-                //Delegate
-                delegate?.update()
+                self.attributedString = syntaxHighlighter?.attributedString
             }
+            
+            //Delegate
+            delegate?.update()
+        }
+    }
+
+// // MARK: Compiler Thread
+    public func startCompiler() {
+        SwiftScriptCompiler.compilerThread?.cancel()
+        SwiftScriptCompiler.compilerThread = Thread(){ [self] in
+            self.compile()
+        }
+        
+        SwiftScriptCompiler.compilerThread?.qualityOfService = .userInteractive
+        SwiftScriptCompiler.compilerThread?.start()
+    }
+    
+    public func shouldStopPoller() {
+        if SwiftScriptCompiler.compilerThread!.isCancelled {
+            Thread.exit()
         }
     }
     

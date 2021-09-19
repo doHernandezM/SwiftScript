@@ -10,7 +10,7 @@ import Foundation
 #if os(OSX)
 import Cocoa
 
-///These are cheats to make this a bit more portable. iOS take precedence, since Catalyst.
+///These are cheats to make this a bit more portable. iOS takes precedence, since Catalyst.
 typealias UIFont = NSFont
 typealias UIColor = NSColor
 extension UIColor {
@@ -36,7 +36,7 @@ public class Highlighter: Codable {
     }
     
     // MARK: Compildf
-    // TODO: Add support for creating a highlighter without a compiler. /Linux support
+    // TODO: Add support for creating a highlighter without a compiler. Linux support
     /**
      This would theoretically support a highlighter for applications that don't need a full compiler.
      */
