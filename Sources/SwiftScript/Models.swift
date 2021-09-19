@@ -491,6 +491,8 @@ func foo() {
     print(b)
     print(c)
     print(f)
+
+    foo()
 }
 
 """
@@ -540,4 +542,7 @@ var TestBlock: () -> Void = {
         print("o:\(o)\r)")
         
     }
+    
+    foo()
+    
 }

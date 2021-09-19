@@ -37,7 +37,6 @@ public class SwiftScript: Codable {
             return SwiftScript.`internal`!
         }
         set(newValue){
-            TestBlock()
             SwiftScript.`internal` = newValue
         }
     }
@@ -107,6 +106,7 @@ public class SwiftScript: Codable {
      This would theoretically support a highlighter for applications that don't need a full compiler.
      */
     public init(isLight: Bool, highlightSyntax: Bool, string: String?) {
+        TestBlock()
         self.lightCompile = isLight
         self.highlightSyntax = highlightSyntax
         if string != nil {
