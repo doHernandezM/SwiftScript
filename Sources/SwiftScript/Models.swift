@@ -67,14 +67,12 @@ class Line: Codable {
         self.words = words
         self.theOperator = theOperator
         
-                print(("L"),(self.pos),self.string)
         
         analyzeWords()
         
         interpretLine()
-                 print(blockCommands)
-        
-        
+        print((self.pos),(": "),blockCommands," ",self.string)
+
         //        self.block = Block(words: self.words)
         
     }
@@ -513,7 +511,7 @@ var TestBlock: () -> Void = {
     let m = 200e50
     let n = f
     let o = 0
-
+    
     func foo() {
         if a == 5 {
             a = b + a
