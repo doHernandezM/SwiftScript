@@ -435,7 +435,7 @@ enum Operators: String, CaseIterable {
 
 // MARK: - Default Input
 /// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
-let defaultInput = """
+public let defaultInput = """
 var a = 5
 var b = 1
 var c = a + b
