@@ -121,13 +121,13 @@ class Line: Codable {
             
             if (variable1.theOperator?.isCreateVariable() ?? false) {
                 
-                ///I'm not really sure what's going on here `<=4\` then `>=4`??? WTF Maybe a type
+                ///I'm not really sure what's going on here `<=4\` then `>=4`??? WTF Maybe a typo
                 if self.words.count <= 4 {
                     //                    print(self.words)
                     //                    print("|||||||||||||||||||\r\r")
                     if self.words.count >= 4 {
                         let variable3 = self.words[3]
-                        ///likely var ie "foo " or "\"foo\"" | "3.14" | "false"
+                        ///likely var, ie "foo " or "\"foo\"" | "3.14" | "false"
                         if !(variable3.type.isValue()) {
                             variable3.type = .error
                             //Adds whole line error
@@ -376,7 +376,7 @@ enum Operators: String, CaseIterable {
     ///AdditionPrecedence
     ///Left associative
     case addOp = "+"
-    case subOp = "-" //Also signOp
+    case subSignOp = "-" //Supports both subraction and number signing
     
     ///NilCoalescingPrecedence
     ///Right associative
@@ -433,15 +433,40 @@ enum Operators: String, CaseIterable {
     }
 }
 
-// MARK: - Default Input
-/// This is where the compiler stores it's state. Conforms to Codable to theoretically support state save.
-public let defaultInput = """
+// MARK: - Test Input
+/// Current ``SwiftScript`` version
+///
+/// Major number should only change for first release or a major expansion in supported operators/functions. Minor number changes when default input updates to show new support. Revision changed when defualt input changes.
+public let Version = "0.1.0"
+
+
+/// Test string.
+///
+/// This is considered the ``SwiftScript`` version of the Acid2 test. The compiler should support creating and assigning all the `var`/`let` operation, creating functions(`func foo() {...}`), and executing functions (`print()`)
+/// - Note:
+///  The compiler is considered to have passed when:
+///  a = `12`
+///  b = `2`
+///  c = `6`
+///  d = `false`
+///  e = `-3.14`
+///  f = `10`
+///  g = `-5`
+///  h = `"House"`
+///  i = `"ion"`
+///  j = `"jet"`
+///  k = `"redKite"`
+///  l = `01234567891011`
+///  m = `200e50`
+///  n = `9`
+///  0 = `0`
+public let TestString = """
 var a = 5
 var b = 1
 var c = a + b
 let d = false
 let e = -3.14
-var f = 5
+var f = 9 - 0
 let g = -a
 let h = "House"
 let i = "ion"
@@ -469,3 +494,50 @@ func foo() {
 }
 
 """
+
+var TestBlock: () -> Void = {
+    var a = 5
+    var b = 1
+    var c = a + b
+    let d = false
+    let e = -3.14
+    var f = 9 - 0
+    let g = -a
+    let h = "House"
+    let i = "ion"
+    let j = "jet"
+    let k = "redKite"
+    let l = 01234567891011
+    let m = 200e50
+    let n = f
+    let o = 0
+
+    func foo() {
+        if a == 5 {
+            a = b + a
+        }
+        
+        f += 1
+        b = b + 1
+        
+        a += a
+        
+        print("Var Values\r")
+        print("a:\(a)\r)")
+        print("b:\(b)\r)")
+        print("c:\(c)\r)")
+        print("d:\(d)\r)")
+        print("e:\(e)\r)")
+        print("f:\(f)\r)")
+        print("g:\(g)\r)")
+        print("h:\(h)\r)")
+        print("i:\(i)\r)")
+        print("j:\(j)\r)")
+        print("k:\(k)\r)")
+        print("l:\(l)\r)")
+        print("m:\(m)\r)")
+        print("n:\(n)\r)")
+        print("o:\(o)\r)")
+        
+    }
+}

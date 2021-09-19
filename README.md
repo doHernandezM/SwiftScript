@@ -1,8 +1,16 @@
-# SwiftScript
+# SwiftScript v0.1
+##"*Lite*" Version of Swift: for fun
 
 ### "1 part HyperCard, 1 part realBasic(rip), and 3 parts Swift."
 
-This code currently just highlights most swift code. However, in the future this will be able to do things based on the compiled text.
+The intent of Schwifty is to be even more light weight and easy to use than Swfit. It does this by dropping support for everything but assigning variables, arithmetic and if statements.
+
+### Status
+• This code currently just highlights most swift code. However, in the future this will be able to do things based on the compiled text.
+• Going to use pre-fab blocks to support 
+
+**Todo:**
+• Highlight entered text vs error vs string
 
 I'm thinking that I should be able to use blocks to get things done.
 

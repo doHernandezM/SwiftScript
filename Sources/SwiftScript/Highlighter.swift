@@ -90,8 +90,8 @@ public class Highlighter: Codable {
      }
      */
     
-    let kDefaultFontSize: CGFloat = 15.0
-    let kDefaultFontSizeSmall: CGFloat = 12.0
+    let kDefaultFontSize: CGFloat = 20.0
+    let kDefaultFontSizeSmall: CGFloat = 18.0
     
     // FIXME: THis code need much simplyfication and portability.
     func attributesForLine(line: String) -> NSAttributedString {

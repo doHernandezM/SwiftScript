@@ -27,7 +27,7 @@ public class SwiftScript: Codable {
     
     ///
     ///
-    ///To keeps things easy and make sure we only use this when we need it, we are making this static and public singleton, which is backed by an internal "\`internal?\`"
+    ///To keeps things easy and make sure we only use this when we need it, we are making this static and public singleton, which is backed by an optional \``internal`\`?\.
     static public var compiler: SwiftScript {
         get {
             if (SwiftScript.`internal` == nil) {
@@ -37,6 +37,7 @@ public class SwiftScript: Codable {
             return SwiftScript.`internal`!
         }
         set(newValue){
+            TestBlock()
             SwiftScript.`internal` = newValue
         }
     }
@@ -44,15 +45,15 @@ public class SwiftScript: Codable {
     
     static public var thread: Thread? = nil
     
-    
     // MARK: Syntax Highlighting
     public var highlightSyntax = false
-#if os(OSX) || os(iOS)
+#if os(OSX) || os(iOS) ///Currently we do not have linux support
     public var syntaxHighlighter: Highlighter? = nil
     public var attributedString: NSAttributedString? = nil
 #endif
+    
     // MARK: - Compiling
-    /// Set this to start the compiler.
+    /// Set this to the string that you want to compile or highlight to start the compiler.
     public var string: String? = "" {
         didSet {
             startCompiling()
@@ -68,9 +69,7 @@ public class SwiftScript: Codable {
             state.lines = []
             state.variables = []
             
-            //Analyzer
-            
-            ///Creates [Line]
+            ///Analyzer
             analyzeLines(codeString: codeString)
             
             ///Syntax Highlighting
@@ -81,15 +80,15 @@ public class SwiftScript: Codable {
                 self.attributedString = syntaxHighlighter?.attributedString
             }
             
-            //Delegate
+            //Update delegate here
             DispatchQueue.main.async {
                 self.delegate?.update()
             }
         }
     }
     
-    // // MARK: Compiler Thread
-    public func startCompiling() {
+    // MARK: Thread
+    private func startCompiling() {
         SwiftScript.thread?.cancel()
     
         SwiftScript.thread = nil
@@ -103,8 +102,8 @@ public class SwiftScript: Codable {
     }
     
     // MARK: Init
-    // TODO: Add support for creating a light compiler for a highlighter
-    /*
+    // TODO: Add support for creating a light compiler for a highlighter only use.
+    /**
      This would theoretically support a highlighter for applications that don't need a full compiler.
      */
     public init(isLight: Bool, highlightSyntax: Bool, string: String?) {
@@ -122,9 +121,9 @@ public class SwiftScript: Codable {
     }
     
     // MARK: - Analyze - Line
-    //Splits the raw code string into string components based on newlines.
+    ///Splits the raw code string into string components based on newlines.
     func analyzeLines(codeString: String) {
-        //        print("\r\t Analyzed Lines\r")
+                print("\r\t Analyzed Lines\r")
         
         let codeLines = codeString.components(separatedBy: .newlines)
         
@@ -132,6 +131,7 @@ public class SwiftScript: Codable {
             
             let line = Line(text: lineString, pos: int, words: [], theOperator: nil)
             //Adds line to state
+            print(line)
             state.lines.append(line)
             
         }
@@ -154,7 +154,7 @@ public class SwiftScript: Codable {
 }
 
 // MARK: - Delegate
-//Splits the raw code string into string components based on newlines.
+///Called when the compiler finishes highlighting syntax/compiling.
 public protocol SchwiftScriptDelegate {
     func update()
 }
