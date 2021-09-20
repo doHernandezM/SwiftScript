@@ -92,7 +92,7 @@ class Line: Codable {
         // MARK: - Line Pattern
         // Step 2 - Patterns
         // Assign values to variable
-        let variable1 = self.words[0] /// likely let/var or var ie "Let " or "foo "
+        let variable1 = self.words[0] /// likely let/var or var ie "Let " or "foo" maybe "func" or command/function
         
         //        if self.words.count > 0 {
         //            // Modify existing variable
@@ -109,7 +109,7 @@ class Line: Codable {
         //
         if self.words.count > 1 {
             
-            let variable2 = self.words[1]/// likely var or assignOp ie "foo " or "= "
+            let variable2 = self.words[1]/// likely var or assignOp ie "foo " or "= " or function name
             
             // Modify existing variable
             if (variable2.theOperator?.isAssignOperator() ?? false)  {
@@ -219,8 +219,7 @@ class Word: Codable {
     }
     
     func isString() -> Bool {
-        
-        if isQoute(string: String(string.prefix(1))) && isQoute(string: String(string.suffix(1))) {
+        if isQoute(string: String(string.prefix(1))) || isQoute(string: String(string.suffix(1))) {
             type = .string
             return true
         }
@@ -237,10 +236,9 @@ class Word: Codable {
             }
         }
         
-        for (_,anOpertator) in Operators.allCases.enumerated() {
-            if string == anOpertator.rawValue {
-                theOperator = anOpertator
-                //                print(("OP:"),anOpertator.string())
+        for (_,anOperator) in Operators.allCases.enumerated() {
+            if string == anOperator.rawValue {
+                theOperator = anOperator
                 type = .`operator`
                 return
             }
@@ -324,6 +322,8 @@ enum Types: String {
     case float
     case bool
     
+    case userCustom
+    
     func isValue() -> Bool {
         switch self {
         case .string, .int, .double, .float, .bool:
@@ -340,6 +340,15 @@ enum Types: String {
             return false
         }
     }
+    
+    func isUserCustom() -> Bool {
+        switch self {
+        case .userCustom:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 enum Commands: String, CaseIterable {
@@ -347,6 +356,7 @@ enum Commands: String, CaseIterable {
     case print = "print"
     case dev = "Dev"
     case UI = "UI"
+    case user = "floopy"
 }
 
 enum Operators: String, CaseIterable {
