@@ -5,6 +5,8 @@
 
 The intent of Schwifty is to be even more light weight and easy to use than Swfit. It does this by dropping support for everything but assigning variables, arithmetic and if statements.
 
+Download the demo app  [Schwifty](https://github.com/doHernandezM/Schwifty) for more
+
 ### Status
 • This code currently just highlights most swift code. However, in the future this will be able to do things based on the compiled text.
 • Going to use pre-fab blocks to support 
