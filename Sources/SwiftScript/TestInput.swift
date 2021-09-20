@@ -13,7 +13,7 @@ import Foundation
 /// Current ``SwiftScript`` version
 ///
 /// Major number should only change for first release or a major expansion in supported operators/functions. Minor number changes when default input updates to show new support. Revision changed when defualt input changes.
-public let Version = "0.1.0"
+public let Version = "0.1.1"
 
 
 /// Test string.
@@ -29,10 +29,10 @@ public let Version = "0.1.0"
 ///  - e = `-3.14`
 ///  - f = `10`
 ///  - g = `-5`
-///  - h = `"House"`
+///  - h = `"Hou se"`
 ///  - i = `"ion"`
 ///  - j = `"jet"`
-///  - k = `"redKite"`
+///  - k = `"red. Kite"`
 ///  - l = `01234567891011`
 ///  - m = `200e50`
 ///  - n = `9`
@@ -45,10 +45,10 @@ let d = false
 let e = -3.14
 var f = 9 - 0
 let g = -a
-let h = "House"
+let h = "Hou se"
 let i = "ion"
 let j = "jet"
-let k = "redKite"
+let k = "red. Kite"
 let l = 01234567891011
 let m = 200e50
 let n = f
@@ -82,10 +82,10 @@ var TestBlock: () -> Void = {
     let e = -3.14
     var f = 9 - 0
     let g = -a
-    let h = "House"
+    let h = "Hou se"
     let i = "ion"
     let j = "jet"
-    let k = "redKite"
+    let k = "red. Kite"
     let l = 01234567891011
     let m = 200e50
     let n = f

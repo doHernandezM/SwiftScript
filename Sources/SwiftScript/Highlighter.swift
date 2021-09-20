@@ -154,6 +154,8 @@ public class Highlighter: Codable {
             font = UIFont.monospacedSystemFont(ofSize: kDefaultFontSize, weight: .semibold)
             multipleAttributes[NSAttributedString.Key.font] = font
             multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemIndigo
+        case .userCustom:
+            multipleAttributes[NSAttributedString.Key.foregroundColor] = UIColor.systemPurple
         }
         
         let myAttrString = NSAttributedString(string: word.string, attributes: multipleAttributes)
